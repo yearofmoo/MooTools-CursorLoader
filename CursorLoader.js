@@ -19,6 +19,9 @@ CursorLoader = new new Class({
     }
   },
 
+  x : 0,
+  y : 0,
+
   init : function() {
 
     this.element = new Element('div',{
@@ -49,7 +52,13 @@ CursorLoader = new new Class({
       this.setY(y);
     }.bind(this));
 
+    this.initialized = true;
+
     this.hide();
+  },
+
+  isInitialized : function() {
+    return this.initialized;
   },
 
   getElement : function() {
@@ -61,18 +70,27 @@ CursorLoader = new new Class({
   },
 
   show : function() {
+    if(!this.isInitialized()) {
+      this.init();
+    }
     this.getElement().setStyles({
       'display':'block'
     });
   },
 
   hide : function() {
+    if(!this.isInitialized()) {
+      this.init();
+    }
     this.getElement().setStyles({
       'display':'none'
     });
   },
 
   reveal : function() {
+    if(!this.isInitialized()) {
+      this.init();
+    }
     var fx = this.getFx();
     this.show();
     fx.start({
@@ -81,6 +99,9 @@ CursorLoader = new new Class({
   },
 
   dissolve : function() {
+    if(!this.isInitialized()) {
+      this.init();
+    }
     if(this.dissolveCapabilitiesEnabled()) {
       this.getFx().start({
 
@@ -120,6 +141,9 @@ CursorLoader = new new Class({
   },
 
   position : function(x,y) {
+    if(!this.isInitialized()) {
+      this.init();
+    }
     this.setX(x);
     this.setY(y);
   },

@@ -2,8 +2,6 @@ MooTools-Cursor-Loader is a quick addon tool that can be used as a loading icon 
 
 The loading icon follows the mouse and can be used as follows:
 
-CursorLoader.init(); //Get it ready
-
 CursorLoader.show();
 
 CursorLoader.hide();
