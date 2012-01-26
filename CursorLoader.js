@@ -37,6 +37,7 @@ CursorLoader = new new Class({
     document.addEvent('mousemove',this.onMouseMove);
 
     this.initialized = true;
+    this.setOpacity(1);
     this.hide();
   },
 
@@ -135,11 +136,11 @@ CursorLoader = new new Class({
     if(!this.isInitialized()) {
       this.init();
     }
-    if(this.isHidden() && !this.isRevealing()) {
+    if(!this.isRevealing() && (this.isHidden() || this.isDissolving())) {
       this.animationDirection = 'reveal';
       this.show();
       this.getFx().start({
-        'opacity':[0,1]
+        'opacity':1
       });
     }
   },
@@ -151,10 +152,10 @@ CursorLoader = new new Class({
     if(this.isTiming()) {
       this.onEndTimer = this.dissolve;
     }
-    else if(this.isVisible() && !this.isDissolving()) {
+    else if(!this.isDissolving() && (this.isVisible() || this.isRevealing())) {
       this.animationDirection = 'dissolve';
       this.getFx().start({
-        'opacity':[1,0]
+        'opacity':0
       }).chain(this.hide.bind(this));
     }
   },
@@ -184,6 +185,10 @@ CursorLoader = new new Class({
   getOpacity : function() {
     var o = this.getElement().getStyle('opacity');
     return (o == null || o == 1) ? 1 : o;
+  },
+
+  setOpacity : function(o) {
+    this.getElement().setOpacity(o);
   },
 
   getFx : function() {
