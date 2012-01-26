@@ -33,7 +33,8 @@ CursorLoader = new new Class({
       'complete':this.onAnimationComplete.bind(this)
     });
 
-    document.addEvent('mousemove',this.onMouseMove.bind(this));
+    this.onMouseMove = this.onMouseMove.bind(this);
+    document.addEvent('mousemove',this.onMouseMove);
 
     this.initialized = true;
     this.hide();
@@ -267,6 +268,15 @@ CursorLoader = new new Class({
 
   onDissolve : function() {
     this.fireEvent('dissolve');
+  },
+
+  destroy : function() {
+    document.removeEvent('mousemove',this.onMouseMove);
+    this.getElement().destroy();
+    delete this.element;
+    delete this.inner;
+    this.x = -9999;
+    this.y = -9999;
   }
 
 });
