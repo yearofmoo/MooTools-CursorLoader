@@ -19,10 +19,13 @@ CursorLoader = new new Class({
     }
   },
 
-  x : 0,
-  y : 0,
+  x : -9999,
+  y : -9999,
 
-  init : function() {
+  init : function(options) {
+    if(options) {
+      this.setOptions(options);
+    }
     this.buildElements();
     this.fx = new Fx.Morph(this.getElement(),this.options.fxOptions);
     this.fx.addEvents({
@@ -32,11 +35,22 @@ CursorLoader = new new Class({
 
     document.addEvent('mousemove',this.onMouseMove.bind(this));
 
-    this.setX(-9999);
-    this.setY(-9999);
-
     this.initialized = true;
     this.hide();
+  },
+
+  setOptions : function(options) {
+    this.options = Object.append(this.options,options);
+  },
+
+  setMinDisplayTime : function(time) {
+    this.setOptions({
+      minDisplayTime : time
+    });
+  },
+
+  getMinDisplayTime : function() {
+    return this.options.minDisplayTime;
   },
 
   buildElements : function() {
@@ -104,7 +118,7 @@ CursorLoader = new new Class({
     if(!this.isInitialized()) {
       this.init();
     }
-    if(this.timer) {
+    if(this.isTiming()) {
       this.onEndTimer = this.hide;
     }
     else {
@@ -133,7 +147,7 @@ CursorLoader = new new Class({
     if(!this.isInitialized()) {
       this.init();
     }
-    if(this.timer) {
+    if(this.isTiming()) {
       this.onEndTimer = this.dissolve;
     }
     else if(this.isVisible() && !this.isDissolving()) {
@@ -188,11 +202,11 @@ CursorLoader = new new Class({
   },
   
   startTimer : function() {
-    if(this.timer) {
+    if(this.isTiming()) {
       this.clearTimer();
     }
     else {
-      this.timer = this.endTimer.delay(this.options.minDisplayTime,this);
+      this.timer = this.endTimer.delay(this.getMinDisplayTime(),this);
     }
   },
 
@@ -201,6 +215,10 @@ CursorLoader = new new Class({
       clearTimeout(this.timer);
       this.timer = null;
     }
+  },
+
+  isTiming : function() {
+    return !! this.timer;
   },
 
   endTimer : function() {
