@@ -9,7 +9,7 @@ CursorLoader = new new Class({
   options : {
     className : 'cursor-loader',
     innerClassName : 'cursor-loader-inner',
-    minDisplayTime : 1000,
+    minDisplayTime : 0,
     offsets : {
       y : 10,
       x : 10
@@ -23,7 +23,23 @@ CursorLoader = new new Class({
   y : 0,
 
   init : function() {
+    this.buildElements();
+    this.fx = new Fx.Morph(this.getElement(),this.options.fxOptions);
+    this.fx.addEvents({
+      'start':this.onAnimationStart.bind(this),
+      'complete':this.onAnimationComplete.bind(this)
+    });
 
+    document.addEvent('mousemove',this.onMouseMove.bind(this));
+
+    this.setX(-9999);
+    this.setY(-9999);
+
+    this.initialized = true;
+    this.hide();
+  },
+
+  buildElements : function() {
     this.element = new Element('div',{
       'class' : this.options.className,
       'styles' : {
@@ -34,31 +50,34 @@ CursorLoader = new new Class({
     this.inner = new Element('div',{
       'class' : this.options.innerClassName
     }).inject(this.getElement());
-
-    this.fx = new Fx.Morph(this.getElement(),this.options.fxOptions);
-    this.fx.addEvent('complete',function() {
-      if(this.isVisible()) {
-        this.onReveal();
-      }
-      else {
-        this.onDissolve();
-      }
-    }.bind(this));
-
-    document.addEvent('mousemove',function(event) {
-      var x = event.page.x;
-      var y = event.page.y;
-      this.setX(x);
-      this.setY(y);
-    }.bind(this));
-
-    this.initialized = true;
-
-    this.hide();
   },
 
   isInitialized : function() {
     return this.initialized;
+  },
+
+  isHidden : function() {
+    return !this.isVisible();
+  },
+
+  isVisible : function() {
+    return this.visible == true;
+  },
+
+  isAnimating : function() {
+    return this.getAnimationDirection() != null;
+  },
+
+  isRevealing : function() {
+    return this.getAnimationDirection() == 'reveal';
+  },
+
+  isDissolving : function() {
+    return this.getAnimationDirection() == 'dissolve';
+  },
+
+  getAnimationDirection : function() {
+    return this.animationDirection;
   },
 
   getElement : function() {
@@ -70,12 +89,15 @@ CursorLoader = new new Class({
   },
 
   show : function() {
+    this.position();
     if(!this.isInitialized()) {
       this.init();
     }
     this.getElement().setStyles({
       'display':'block'
     });
+    this.visible = false;
+    this.onShow();
   },
 
   hide : function() {
@@ -85,47 +107,55 @@ CursorLoader = new new Class({
     this.getElement().setStyles({
       'display':'none'
     });
+    this.visible = true;
+    this.onHide();
   },
 
   reveal : function() {
     if(!this.isInitialized()) {
       this.init();
     }
-    var fx = this.getFx();
-    this.show();
-    fx.start({
-      'opacity':[0,1]
-    });
+    if(this.isHidden() && !this.isRevealing()) {
+      this.animationDirection = 'reveal';
+      this.show();
+      var x = this.getX();
+      x = x < 0 ? 0 : x;
+      var y = this.getY();
+      y = y < 0 ? 0 : y;
+      this.getFx().start({
+        'left' : [x,x],
+        'top' : [y,y],
+        'opacity':[0,1]
+      });
+    }
   },
 
   dissolve : function() {
     if(!this.isInitialized()) {
       this.init();
     }
-    if(this.dissolveCapabilitiesEnabled()) {
+    if(this.isVisible() && !this.isDissolving()) {
+      this.animationDirection = 'dissolve';
       this.getFx().start({
-
         'opacity':[1,0]
-
       }).chain(this.hide.bind(this));
-    }
-    else {
-      this.addEvent('dissolveEnabled:once',function() {
-        this.dissolve();
-      }.bind(this));
     }
   },
 
   setX : function(x) {
+    x += this.options.offsets.x;
     this.x = x;
-    var offset = this.options.offsets.x;
-    this.getElement().style.left = (offset + x)+'px';
+    if(this.isVisible()) {
+      this.getElement().style.left = x +'px';
+    }
   },
 
   setY : function(y) {
+    y += this.options.offsets.y;
     this.y = y;
-    var offset = this.options.offsets.y;
-    this.getElement().style.top = (offset + y)+'px';
+    if(this.isVisible()) {
+      this.getElement().style.top = y+'px';
+    }
   },
 
   getX : function() {
@@ -136,6 +166,11 @@ CursorLoader = new new Class({
     return this.y;
   },
 
+  getOpacity : function() {
+    var o = this.getElement().getStyle('opacity');
+    return (o == null || o == 1) ? 1 : o;
+  },
+
   getFx : function() {
     return this.fx;
   },
@@ -144,34 +179,81 @@ CursorLoader = new new Class({
     if(!this.isInitialized()) {
       this.init();
     }
+    if(x == null && y == null) {
+      x = this.getX() - this.options.offsets.x;
+      y = this.getY() - this.options.offsets.y;
+    }
     this.setX(x);
     this.setY(y);
   },
+  
+  startTimer : function() {
+    if(this.timer) {
+      this.clearTimer();
+    }
+    else {
+      var $empty = function() { };
+      this._hide = this.hide;
+      this._dissolve = this.dissolve;
+      this.dissolve = this.hide = $empty;
+    }
+    this.timer = this.endTimer.delay(this.options.minDisplayTime,this);
+  },
 
-  onReveal : function() {
-    var minTime = this.options.minDisplayTime;
-    if(minTime > 0) {
-      this.disableDissolveCapabilities();
-      (function() {
-        this.enableDissolveCapabilities();
-        this.fireEvent('dissolveEnabled');
-      }).delay(minTime,this);
+  clearTimer : function() {
+    if(this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
     }
   },
 
+  endTimer : function() {
+    this.clearTimer();
+    this.hide = this._hide;
+    this.dissolve = this._dissolve;
+    delete this._hide;
+    delete this._dissolve;
+  },
+
+  onMouseMove : function(event) {
+    this.setX(event.page.x);
+    this.setY(event.page.y);
+  },
+
+  onAnimationStart : function() {
+    this.fireEvent('animationStart');
+  },
+
+  onAnimationComplete : function() {
+    var direction = this.getAnimationDirection();
+    this.animationDirection = null;
+    this.fireEvent('animationComplete');
+
+    if(direction == 'reveal') {
+      this.onReveal();
+    }
+    else {
+      this.onDissolve();
+    }
+  },
+
+  onShow : function() {
+    this.fireEvent('show');
+    if(this.options.minDisplayTime > 0) {
+      this.startTimer();
+    }
+  },
+
+  onHide : function() {
+    this.fireEvent('hide');
+  },
+
+  onReveal : function() {
+    this.fireEvent('reveal');
+  },
+
   onDissolve : function() {
-  },
-
-  disableDissolveCapabilities : function() {
-    this.dissolveDisabled = true;
-  },
-
-  enableDissolveCapabilities : function() {
-    this.dissolveDisabled = false;
-  },
-
-  dissolveCapabilitiesEnabled : function() {
-    return ! this.dissolveDisabled;
+    this.fireEvent('dissolve');
   }
 
 });

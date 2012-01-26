@@ -1,0 +1,30 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head>
+<link rel="stylesheet" href="./CursorLoader.base64.css" type="text/css" charset="utf-8">
+</head> 
+
+<body id="" class=""> 
+  <a href="#" id="show">Show</a>
+  <a href="#" id="hide">Hide</a>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/mootools/1.4.2/mootools-yui-compressed.js"></script>
+<script type="text/javascript" src="./CursorLoader.js"></script>
+<script type="text/javascript">
+window.addEvent('domready',function() {
+
+  CursorLoader.show();
+
+  $('show').addEvent('click',function(event) {
+    event.stop();
+    CursorLoader.reveal();
+  });
+
+  $('hide').addEvent('click',function(event) {
+    event.stop();
+    CursorLoader.dissolve();
+  });
+
+});
+</script>
+</body>
+</html> 
