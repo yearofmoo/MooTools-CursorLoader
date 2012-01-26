@@ -9,7 +9,7 @@ CursorLoader = new new Class({
   options : {
     className : 'cursor-loader',
     innerClassName : 'cursor-loader-inner',
-    minDisplayTime : 5000,
+    minDisplayTime : 500,
     offsets : {
       y : 10,
       x : 10
