@@ -9,6 +9,7 @@ CursorLoader = new new Class({
   options : {
     className : 'cursor-loader',
     innerClassName : 'cursor-loader-inner',
+    zIndex : 1000,
     minDisplayTime : 500,
     offsets : {
       y : 10,
@@ -66,6 +67,9 @@ CursorLoader = new new Class({
     this.inner = new Element('div',{
       'class' : this.options.innerClassName
     }).inject(this.getElement());
+
+    var z = parseInt(this.element.getStyle('z-index')) || this.options.zIndex;
+    this.setZIndex(z);
   },
 
   isInitialized : function() {
@@ -192,6 +196,15 @@ CursorLoader = new new Class({
 
   setOpacity : function(o) {
     this.getElement().setOpacity(o);
+  },
+
+  getZIndex : function() {
+    return this.getElement().getStyle('z-index');
+  },
+
+  setZIndex : function(z) {
+    this.options.zIndex = z;
+    this.getElement().setStyle('z-index',z);
   },
 
   getFx : function() {
