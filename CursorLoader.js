@@ -118,13 +118,7 @@ CursorLoader = new new Class({
     if(this.isHidden() && !this.isRevealing()) {
       this.animationDirection = 'reveal';
       this.show();
-      var x = this.getX();
-      x = x < 0 ? 0 : x;
-      var y = this.getY();
-      y = y < 0 ? 0 : y;
       this.getFx().start({
-        'left' : [x,x],
-        'top' : [y,y],
         'opacity':[0,1]
       });
     }
