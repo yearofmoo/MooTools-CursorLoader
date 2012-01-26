@@ -136,7 +136,10 @@ CursorLoader = new new Class({
     if(!this.isInitialized()) {
       this.init();
     }
-    if(!this.isRevealing() && (this.isHidden() || this.isDissolving())) {
+    if(this.isRevealing()) {
+      this.startTimer();
+    }
+    else if(this.isHidden() || this.isDissolving()) {
       this.animationDirection = 'reveal';
       this.show();
       this.getFx().start({
