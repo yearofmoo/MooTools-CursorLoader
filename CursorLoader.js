@@ -89,13 +89,13 @@ CursorLoader = new new Class({
   },
 
   show : function() {
-    this.position();
     if(!this.isInitialized()) {
       this.init();
     }
     this.getElement().setStyles({
       'display':'block'
     });
+    this.position();
     this.visible = false;
     this.onShow();
   },
