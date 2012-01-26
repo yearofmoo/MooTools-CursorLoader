@@ -9,7 +9,7 @@ CursorLoader = new new Class({
   options : {
     className : 'cursor-loader',
     innerClassName : 'cursor-loader-inner',
-    minDisplayTime : 0,
+    minDisplayTime : 5000,
     offsets : {
       y : 10,
       x : 10
@@ -104,11 +104,16 @@ CursorLoader = new new Class({
     if(!this.isInitialized()) {
       this.init();
     }
-    this.getElement().setStyles({
-      'display':'none'
-    });
-    this.visible = true;
-    this.onHide();
+    if(this.timer) {
+      this.onEndTimer = this.hide;
+    }
+    else {
+      this.getElement().setStyles({
+        'display':'none'
+      });
+      this.visible = true;
+      this.onHide();
+    }
   },
 
   reveal : function() {
@@ -128,7 +133,10 @@ CursorLoader = new new Class({
     if(!this.isInitialized()) {
       this.init();
     }
-    if(this.isVisible() && !this.isDissolving()) {
+    if(this.timer) {
+      this.onEndTimer = this.dissolve;
+    }
+    else if(this.isVisible() && !this.isDissolving()) {
       this.animationDirection = 'dissolve';
       this.getFx().start({
         'opacity':[1,0]
@@ -137,18 +145,16 @@ CursorLoader = new new Class({
   },
 
   setX : function(x) {
-    x += this.options.offsets.x;
-    this.x = x;
+    this.x = x + this.options.offsets.x;
     if(this.isVisible()) {
-      this.getElement().style.left = x +'px';
+      this.getElement().style.left = this.x +'px';
     }
   },
 
   setY : function(y) {
-    y += this.options.offsets.y;
-    this.y = y;
+    this.y = y + this.options.offsets.y;
     if(this.isVisible()) {
-      this.getElement().style.top = y+'px';
+      this.getElement().style.top = this.y+'px';
     }
   },
 
@@ -186,12 +192,8 @@ CursorLoader = new new Class({
       this.clearTimer();
     }
     else {
-      var $empty = function() { };
-      this._hide = this.hide;
-      this._dissolve = this.dissolve;
-      this.dissolve = this.hide = $empty;
+      this.timer = this.endTimer.delay(this.options.minDisplayTime,this);
     }
-    this.timer = this.endTimer.delay(this.options.minDisplayTime,this);
   },
 
   clearTimer : function() {
@@ -203,10 +205,9 @@ CursorLoader = new new Class({
 
   endTimer : function() {
     this.clearTimer();
-    this.hide = this._hide;
-    this.dissolve = this._dissolve;
-    delete this._hide;
-    delete this._dissolve;
+    if(this.onEndTimer) {
+      this.onEndTimer.apply(this);
+    }
   },
 
   onMouseMove : function(event) {
