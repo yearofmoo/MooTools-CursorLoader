@@ -5,3 +5,15 @@ The loading icon follows the mouse and can be used as follows:
 CursorLoader.show();
 
 CursorLoader.hide();
+
+---
+
+Test files are included in the Test directory. To run the tests do the following:
+
+1. Run "git submodule update --init"
+
+2. cd to Test/JazzMint
+
+3. Run "git submodule update --init" again
+
+4. Access Test/runner.html in any browser
