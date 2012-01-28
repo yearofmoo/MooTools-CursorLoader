@@ -104,6 +104,10 @@ CursorLoader = new new Class({
     return this.element;
   },
 
+  getInnerElement : function() {
+    return this.inner;
+  },
+
   isVisible : function() {
     return this.getElement().getStyle('display') == 'block';
   },
@@ -112,6 +116,7 @@ CursorLoader = new new Class({
     if(!this.isInitialized()) {
       this.init();
     }
+    this.setOpacity(1);
     this.getElement().setStyles({
       'display':'block'
     });
@@ -128,6 +133,7 @@ CursorLoader = new new Class({
       this.onEndTimer = this.hide;
     }
     else {
+      this.setOpacity(0);
       this.getElement().setStyles({
         'display':'none'
       });
@@ -145,9 +151,10 @@ CursorLoader = new new Class({
     }
     else if(this.isHidden() || this.isDissolving()) {
       this.animationDirection = 'reveal';
+      var o = this.getOpacity();
       this.show();
       this.getFx().start({
-        'opacity':1
+        'opacity':[o,1]
       });
     }
   },
@@ -296,10 +303,14 @@ CursorLoader = new new Class({
     this.getElement().destroy();
     delete this.element;
     delete this.inner;
+    this.initialized = false;
     this.x = -9999;
     this.y = -9999;
+    this.options = Object.clone(this.defaultOptions);
   }
 
 });
+
+CursorLoader.defaultOptions = Object.clone(CursorLoader.options);
 
 })(document.id,$$);
