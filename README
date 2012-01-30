@@ -14,10 +14,6 @@ CursorLoader.destroy(); (if you want to remove the object entirely)
 
 Test files are included in the Test directory. To run the tests do the following:
 
-1. Run "git submodule update --init"
+1. Run "git submodule update --init --recursive"
 
-2. cd to Test/JazzMint
-
-3. Run "git submodule update --init" again
-
-4. Access Test/runner.html in any browser
+2. Access Test/runner.html in any browser
