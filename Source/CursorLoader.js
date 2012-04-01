@@ -36,6 +36,7 @@ CursorLoader = new new Class({
 
     this.onMouseMove = this.onMouseMove.bind(this);
     document.addEvent('mousemove',this.onMouseMove);
+    window.addEvent('scroll',this.onMouseMove);
 
     this.initialized = true;
     this.setOpacity(1);
