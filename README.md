@@ -38,9 +38,3 @@ CursorLoader.hide();
 //destroy for good
 CursorLoader.destroy();
 ```
-
-## Testing
-Test files are included in the Test directory. To run the tests do the following:
-
-1. Run "git submodule update --init --recursive"
-2. Access Test/runner.html in any browser
