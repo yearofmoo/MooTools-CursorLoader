@@ -259,8 +259,10 @@ CursorLoader = new new Class({
   },
 
   onMouseMove : function(event) {
-    this.setX(event.page.x);
-    this.setY(event.page.y);
+    if(event && event.page) {
+      this.setX(event.page.x);
+      this.setY(event.page.y);
+    }
   },
 
   onAnimationStart : function() {
