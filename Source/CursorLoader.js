@@ -36,7 +36,6 @@ CursorLoader = new new Class({
 
     this.onMouseMove = this.onMouseMove.bind(this);
     document.addEvent('mousemove',this.onMouseMove);
-    window.addEvent('scroll',this.onMouseMove);
 
     this.initialized = true;
     this.setOpacity(1);
@@ -61,7 +60,7 @@ CursorLoader = new new Class({
     this.element = new Element('div',{
       'class' : this.options.className,
       'styles' : {
-        'position' : 'absolute'
+        'position' : 'fixed'
       }
     }).inject(document.body);
 
@@ -259,9 +258,9 @@ CursorLoader = new new Class({
   },
 
   onMouseMove : function(event) {
-    if(event && event.page) {
-      this.setX(event.page.x);
-      this.setY(event.page.y);
+    if(event && event.client) {
+      this.setX(event.client.x);
+      this.setY(event.client.y);
     }
   },
 
