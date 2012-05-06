@@ -152,10 +152,13 @@ CursorLoader = new new Class({
     else if(this.isHidden() || this.isDissolving()) {
       this.animationDirection = 'reveal';
       var o = this.getOpacity();
-      this.show();
-      this.getFx().start({
-        'opacity':[o,1]
+      this.getFx().set({
+        'opacity':(o || 0),
+        'display':'block'
+      }).start({
+        'opacity':1
       });
+      this.onShow();
     }
   },
 
