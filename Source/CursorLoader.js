@@ -179,16 +179,12 @@ CursorLoader = new new Class({
 
   setX : function(x) {
     this.x = x + this.options.offsets.x;
-    if(this.isVisible()) {
-      this.getElement().style.left = this.x +'px';
-    }
+    this.getElement().style.left = this.x +'px';
   },
 
   setY : function(y) {
     this.y = y + this.options.offsets.y;
-    if(this.isVisible()) {
-      this.getElement().style.top = this.y+'px';
-    }
+    this.getElement().style.top = this.y+'px';
   },
 
   getX : function() {
