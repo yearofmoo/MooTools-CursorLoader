@@ -201,7 +201,7 @@ CursorLoader = new new Class({
   },
 
   setOpacity : function(o) {
-    this.getElement().setOpacity(o);
+    this.getElement().setStyle('opacity',o);
   },
 
   getZIndex : function() {
