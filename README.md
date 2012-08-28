@@ -30,7 +30,7 @@ Include the js and css files into your website.
 The loading icon follows the mouse and can be used as follows:
 
 ```javascript
-//initialize the loader with some custom options
+//initialize the loader with some custom options (this is optional)
 CursorLoader.init({ ... });
 
 //fade in
@@ -64,5 +64,26 @@ The Loading graphics can be changed by adding the following CSS styles
 /* This is the inner image which is the loading animation */
 .cursor-loader-inner {
   background-image:url("/path/to/loader-animation.png");
+}
+```
+
+### JavaScript
+
+The following options are set by default in the init method and can be overridden by passing in an options object:
+
+```javascript
+{
+  className : 'cursor-loader',
+  innerClassName : 'cursor-loader-inner',
+  registerFirstClick : true, //whether or not to pay attention to the first click to register the (X/Y) coords
+  zIndex : 1000, //the Z-index of the cursor-loader div element
+  minDisplayTime : 500, //the minimum amount of the time that the reveal method will show the element for if a dissolve method is called right after
+  offsets : {
+    y : 10, //x offset
+    x : 10  //y offset
+  },
+  fxOptions : { //fx options for the reveal and dissolve animations
+    link : 'cancel'
+  }
 }
 ```

@@ -8,8 +8,8 @@ CursorLoader = new new Class({
 
   options : {
     className : 'cursor-loader',
-    registerFirstClick : true,
     innerClassName : 'cursor-loader-inner',
+    registerFirstClick : true,
     zIndex : 1000,
     minDisplayTime : 500,
     offsets : {
