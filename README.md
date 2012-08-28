@@ -72,7 +72,7 @@ The Loading graphics can be changed by adding the following CSS styles
 The following options are set by default in the init method and can be overridden by passing in an options object:
 
 ```javascript
-{
+CursorLoader.init({
   className : 'cursor-loader',
   innerClassName : 'cursor-loader-inner',
   registerFirstClick : true, //whether or not to pay attention to the first click to register the (X/Y) coords
@@ -85,5 +85,5 @@ The following options are set by default in the init method and can be overridde
   fxOptions : { //fx options for the reveal and dissolve animations
     link : 'cancel'
   }
-}
+});
 ```
