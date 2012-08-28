@@ -72,6 +72,7 @@ The Loading graphics can be changed by adding the following CSS styles
 The following options are set by default in the init method and can be overridden by passing in an options object:
 
 ```javascript
+//the init method must be called first before any of the other methods are called and can only be called once
 CursorLoader.init({
   className : 'cursor-loader', //outer element className
   innerClassName : 'cursor-loader-inner', //inner element className
