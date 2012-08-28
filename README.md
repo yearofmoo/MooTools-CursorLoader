@@ -87,3 +87,9 @@ CursorLoader.init({
   }
 });
 ```
+
+## More Info + Demo
+
+More information can be found at:
+
+http://yearofmoo.com/CursorLoader
