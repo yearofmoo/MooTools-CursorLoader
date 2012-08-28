@@ -8,6 +8,7 @@ CursorLoader = new new Class({
 
   options : {
     className : 'cursor-loader',
+    registerFirstClick : true,
     innerClassName : 'cursor-loader-inner',
     zIndex : 1000,
     minDisplayTime : 500,
@@ -37,6 +38,11 @@ CursorLoader = new new Class({
     this.onMouseMove = this.onMouseMove.bind(this);
     document.addEvent('mousemove',this.onMouseMove);
 
+    if(this.options.registerFirstClick) {
+      this.onFirstClick = this.onFirstClick.bind(this);
+      document.id(document.body).addEvent('click', this.onFirstClick);
+    }
+
     this.initialized = true;
     this.setOpacity(1);
     this.hide();
@@ -44,6 +50,11 @@ CursorLoader = new new Class({
 
   setOptions : function(options) {
     this.options = Object.append(this.options,options);
+  },
+
+  onFirstClick : function(event) {
+    this.onMouseMove(event);
+    document.removeEvent('click',this.onFirstClick);
   },
 
   setMinDisplayTime : function(time) {

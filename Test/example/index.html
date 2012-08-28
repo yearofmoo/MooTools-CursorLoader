@@ -52,10 +52,9 @@
 <script type="text/javascript">
 window.addEvent('domready',function() {
 
-  CursorLoader.show();
+  CursorLoader.init();
 
   $('show').addEvent('click',function(event) {
-    event.stop();
     CursorLoader.reveal();
   });
 
