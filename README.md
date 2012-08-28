@@ -1,4 +1,5 @@
-# MooTools - CursorLoader
+MooTools - CursorLoader
+-----------------------
 
 CursorLoader is a quick addon tool that can be used to display a  loading icon whenever an action is performed.
 
@@ -16,6 +17,15 @@ The loading icon will follow the mouse and when moved and when the page is scrol
 ## Usage 
 
 Include the js and css files into your website.
+
+```html
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/path/to/CursorLoader.css" />
+
+<!-- JS -->
+<script type="text/javascript" src="/path/to/MooTools-core.js"></script>
+<script type="text/javascript" src="/path/to/CursorLoader.js"></script>
+```
 
 The loading icon follows the mouse and can be used as follows:
 
@@ -38,3 +48,21 @@ CursorLoader.hide();
 //destroy for good
 CursorLoader.destroy();
 ```
+
+## Customization
+
+### CSS
+
+The Loading graphics can be changed by adding the following CSS styles
+
+```css
+/* This is the outer image which is the frame */
+.cursor-loader {
+  background-image:url("/path/to/loader-frame.png");
+}
+
+/* This is the inner image which is the loading animation */
+.cursor-loader-inner {
+  background-image:url("/path/to/loader-animation.png");
+}
+``
