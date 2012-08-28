@@ -65,4 +65,4 @@ The Loading graphics can be changed by adding the following CSS styles
 .cursor-loader-inner {
   background-image:url("/path/to/loader-animation.png");
 }
-``
+```
