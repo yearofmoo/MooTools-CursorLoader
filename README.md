@@ -73,14 +73,14 @@ The following options are set by default in the init method and can be overridde
 
 ```javascript
 CursorLoader.init({
-  className : 'cursor-loader',
-  innerClassName : 'cursor-loader-inner',
+  className : 'cursor-loader', //outer element className
+  innerClassName : 'cursor-loader-inner', //inner element className
   registerFirstClick : true, //whether or not to pay attention to the first click to register the (X/Y) coords
   zIndex : 1000, //the Z-index of the cursor-loader div element
   minDisplayTime : 500, //the minimum amount of the time that the reveal method will show the element for if a dissolve method is called right after
   offsets : {
-    y : 10, //x offset
-    x : 10  //y offset
+    x : 10, //x offset
+    y : 10  //y offset
   },
   fxOptions : { //fx options for the reveal and dissolve animations
     link : 'cancel'
